@@ -298,7 +298,7 @@ def main():
 
     print(f"[Phase 1] 待分析 {len(pending)} 页，并发数 {MAX_CONCURRENT}\n")
 
-    client = anthropic.Anthropic(api_key=_API_KEY)
+    client = anthropic.Anthropic(api_key=_API_KEY, base_url="https://api.anthropic.com")
     t_start = time.time()
     results: dict[int, tuple[str, dict | None]] = {}
 

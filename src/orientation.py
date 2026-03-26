@@ -203,7 +203,7 @@ def main():
     print(f"[Phase 0] 待检测 {len(pending)} 页，并发数 {MAX_CONCURRENT}\n")
 
     # ── 5. 并发检测方向 ──
-    client = anthropic.Anthropic(api_key=_API_KEY)
+    client = anthropic.Anthropic(api_key=_API_KEY, base_url="https://api.anthropic.com")
 
     def process_page(page_num: int) -> tuple[int, int, str]:
         key = f"page_{page_num:03d}"

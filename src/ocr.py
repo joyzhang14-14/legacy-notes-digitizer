@@ -487,7 +487,7 @@ def main():
     print(f"[Phase 2] 待处理 {len(pending)} 页，并发数 {MAX_CONCURRENT}\n")
 
     gemini_client = genai.Client(api_key=_GEMINI_API_KEY)
-    claude_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY)
+    claude_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY, base_url="https://api.anthropic.com")
 
     t_start = time.time()
     results: dict[int, tuple[str, dict]] = {}
