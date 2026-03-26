@@ -511,3 +511,384 @@ def claude_round3(
             time.sleep(5)
 
     raise RuntimeError(f"Claude Round3 {region_id} 所有重试均失败")
+
+
+# ─────────────────────────── corrections 工作流 ───────────────────────────
+
+def build_correction_map(corrections: dict) -> dict:
+    """
+    从用户的手动修正中学习字符级映射规则。
+    corrections 格式：{"page_3": {"line_1": {"original": "...", "corrected": "..."}}}
+    返回：{"错误字": "正确字"}（至少出现 2 次才自动应用）
+    """
+    char_map: dict[str, dict[str, int]] = {}
+    for page_fixes in corrections.values():
+        for fix in page_fixes.values():
+            orig = fix.get("original", "")
+            corr = fix.get("corrected", "")
+            for o, c in zip(orig, corr):
+                if o != c:
+                    char_map.setdefault(o, {})
+                    char_map[o][c] = char_map[o].get(c, 0) + 1
+
+    return {
+        o: max(cmap, key=cmap.get)
+        for o, cmap in char_map.items()
+        if max(cmap.values()) >= 2
+    }
+
+
+def apply_corrections(lines: list, corrections_map: dict) -> list:
+    """将字符映射应用到所有行的 content 字段。"""
+    if not corrections_map:
+        return lines
+    result = []
+    for ln in lines:
+        content = ln.get("content", "")
+        for wrong, right in corrections_map.items():
+            content = content.replace(wrong, right)
+        result.append({**ln, "content": content})
+    return result
+
+
+# ─────────────────────────── 单区域 OCR ───────────────────────────
+
+def ocr_text_block(
+    gemini_client: genai.Client,
+    claude_client: anthropic.Anthropic,
+    img_bgr: np.ndarray,
+    region: dict,
+    forced_level: str | None,
+) -> dict:
+    """
+    对 TEXT_BLOCK 区域执行三轮 OCR，返回完整结果 dict。
+    forced_level: 如果指定则跳过自动选择，直接用该增强级别。
+    """
+    bbox = region["bbox"]
+    region_id = region["id"]
+    crop = crop_region(img_bgr, bbox)
+    versions, auto_best = multi_level_enhance(crop)
+
+    level = forced_level if forced_level else auto_best
+
+    # Round 1：自适应 Gemini 识别
+    print(f"  [{region_id}] Round1 (自动级别={level})...")
+    round1_parsed, level_used = adaptive_gemini_round1(
+        gemini_client, versions, level, region_id
+    )
+
+    # Round 2：4图综合识别
+    print(f"  [{region_id}] Round2 (4图对比)...")
+    round2_parsed = gemini_round2(gemini_client, versions, region_id)
+
+    # Round 3：Claude 交叉校验
+    print(f"  [{region_id}] Round3 (Claude 校验)...")
+    round3_parsed = claude_round3(
+        claude_client, round1_parsed, round2_parsed, crop, region_id
+    )
+
+    # 日文过滤
+    lines = round3_parsed.get("lines", [])
+    total_jp = 0
+    filtered_lines = []
+    for ln in lines:
+        content, jp_count = filter_japanese(ln.get("content", ""))
+        total_jp += jp_count
+        filtered_lines.append({**ln, "content": content})
+
+    if total_jp:
+        print(f"  [WARNING] {region_id} 检测到 {total_jp} 个日文字符，已标记")
+
+    return {
+        "region_id": region_id,
+        "region_type": "TEXT_BLOCK",
+        "bbox": bbox,
+        "enhancement_level_used": level_used,
+        "lines": filtered_lines,
+        "corrections_applied": round3_parsed.get("corrections", []),
+        "overall_confidence": round3_parsed.get("page_confidence", 0.8),
+        "japanese_chars_detected": total_jp,
+        "_raw": {
+            "round1": round1_parsed,
+            "round2": round2_parsed,
+            "round3": round3_parsed,
+        },
+    }
+
+
+def ocr_label_region(
+    gemini_client: genai.Client,
+    img_bgr: np.ndarray,
+    region: dict,
+) -> dict:
+    """对 LABEL_SYSTEM 或 DIMENSION 区域做单轮 Gemini OCR。"""
+    bbox = region["bbox"]
+    region_id = region["id"]
+    crop = crop_region(img_bgr, bbox)
+    versions, _ = multi_level_enhance(crop)
+
+    time.sleep(GEMINI_INTERVAL)
+    raw = gemini_ocr(gemini_client, [versions["light"]], LABEL_PROMPT)
+
+    try:
+        parsed = parse_json_response(raw)
+    except (json.JSONDecodeError, ValueError):
+        parsed = {"labels": [], "dimensions": []}
+
+    total_jp = 0
+    for item in parsed.get("labels", []):
+        filtered, n = filter_japanese(item.get("text", ""))
+        item["text"] = filtered
+        total_jp += n
+
+    return {
+        "region_id": region_id,
+        "region_type": region.get("type"),
+        "bbox": bbox,
+        "labels": parsed.get("labels", []),
+        "dimensions": parsed.get("dimensions", []),
+        "japanese_chars_detected": total_jp,
+    }
+
+
+# ─────────────────────────── 单页处理 ───────────────────────────
+
+def process_page(
+    page_num: int,
+    gemini_client: genai.Client,
+    claude_client: anthropic.Anthropic,
+    force: bool,
+    forced_level: str | None,
+    corrections_map: dict,
+) -> tuple[int, str, dict]:
+    """处理单页，返回 (page_num, status, stats)。"""
+    struct_path = STRUCTURE_DIR / f"page_{page_num:03d}.json"
+    img_path = PAGES_DIR / f"page_{page_num:03d}.png"
+    out_json = OUT_DIR / f"page_{page_num:03d}.json"
+    out_raw = OUT_DIR / f"page_{page_num:03d}_raw.json"
+    out_err = OUT_DIR / f"page_{page_num:03d}.error.txt"
+
+    if not force and out_json.exists():
+        return page_num, "skip", {}
+    if not struct_path.exists():
+        return page_num, "no_struct", {}
+    if not img_path.exists():
+        return page_num, "no_image", {}
+
+    struct = json.loads(struct_path.read_text(encoding="utf-8"))
+    regions = struct.get("regions", [])
+    text_blocks = [r for r in regions if r.get("type") == "TEXT_BLOCK"]
+    label_regions = [r for r in regions if r.get("type") in ("LABEL_SYSTEM", "DIMENSION")]
+
+    if not text_blocks and not label_regions:
+        return page_num, "skip_illus_only", {}
+
+    img_bgr = cv2.imread(str(img_path))
+    if img_bgr is None:
+        return page_num, "error", {"msg": "图片读取失败"}
+
+    t0 = time.time()
+    text_results, label_results = [], []
+    total_jp = total_corrections = 0
+    all_confidences = []
+    raw_records = []
+
+    try:
+        for region in text_blocks:
+            result = ocr_text_block(
+                gemini_client, claude_client, img_bgr, region, forced_level
+            )
+            # 应用用��修正映射
+            result["lines"] = apply_corrections(result["lines"], corrections_map)
+
+            raw_records.append({
+                "region_id": result["region_id"],
+                "round1": result["_raw"]["round1"],
+                "round2": result["_raw"]["round2"],
+                "round3": result["_raw"]["round3"],
+            })
+            final_entry = {k: v for k, v in result.items() if k != "_raw"}
+            text_results.append(final_entry)
+
+            total_jp += result["japanese_chars_detected"]
+            total_corrections += len(result["corrections_applied"])
+            all_confidences.append(result["overall_confidence"])
+
+        for region in label_regions:
+            result = ocr_label_region(gemini_client, img_bgr, region)
+            label_results.append(result)
+            total_jp += result["japanese_chars_detected"]
+
+    except Exception:
+        tb = traceback.format_exc()
+        out_err.write_text(tb, encoding="utf-8")
+        return page_num, "error", {"msg": tb[:200]}
+
+    avg_conf = sum(all_confidences) / len(all_confidences) if all_confidences else None
+
+    final = {
+        "page_number": page_num,
+        "ocr_engine": f"{GEMINI_MODEL} + {CLAUDE_MODEL}",
+        "text_regions": text_results,
+        "label_regions": [r for r in label_results if r["region_type"] == "LABEL_SYSTEM"],
+        "dimension_regions": [r for r in label_results if r["region_type"] == "DIMENSION"],
+        "japanese_chars_detected": total_jp,
+        "average_confidence": round(avg_conf, 3) if avg_conf is not None else None,
+    }
+    out_json.write_text(json.dumps(final, ensure_ascii=False, indent=2), encoding="utf-8")
+    out_raw.write_text(
+        json.dumps({"page_number": page_num, "raw": raw_records}, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    elapsed = time.time() - t0
+    return page_num, "ok", {
+        "text_blocks": len(text_blocks),
+        "label_regions": len(label_regions),
+        "corrections": total_corrections,
+        "japanese": total_jp,
+        "avg_confidence": avg_conf,
+        "elapsed": elapsed,
+    }
+
+
+# ─────────────────────────── 页码范围解析 ───────────────────────────
+
+def parse_pages_arg(arg: str, max_page: int) -> list[int]:
+    pages = set()
+    for part in arg.split(","):
+        part = part.strip()
+        if "-" in part:
+            start, end = part.split("-", 1)
+            pages.update(range(int(start), int(end) + 1))
+        else:
+            pages.add(int(part))
+    return sorted(p for p in pages if 1 <= p <= max_page)
+
+
+# ─────────────────────────── 主流程 ───────────────────────────
+
+def main():
+    parser = argparse.ArgumentParser(description="Phase 2b: Gemini×2 OCR + Claude 交叉校验")
+    parser.add_argument("--pages", type=str, default="10-20",
+                        help='指定页码范围，如 "10-20" / "2,4,6" / "3"（默认 10-20）')
+    parser.add_argument("--force", action="store_true",
+                        help="强制重新分析（覆盖已有 JSON）")
+    parser.add_argument(
+        "--enhancement",
+        choices=["auto", "light", "medium", "heavy", "extreme"],
+        default="auto",
+        help="指定增强级别（默认 auto，根据亮度自动选择）",
+    )
+    parser.add_argument("--corrections", type=str, default=None,
+                        help="人工修正文件路径（corrections.json）")
+    args = parser.parse_args()
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 加载人工修正
+    corrections_map: dict = {}
+    if args.corrections:
+        corr_path = Path(args.corrections)
+        if corr_path.exists():
+            corrections_raw = json.loads(corr_path.read_text(encoding="utf-8"))
+            corrections_map = build_correction_map(corrections_raw)
+            print(f"[修正] 从 {corr_path.name} 加载了 {len(corrections_map)} 条字符映射")
+        else:
+            print(f"[警告] 修正文件不存在：{corr_path}")
+
+    forced_level = None if args.enhancement == "auto" else args.enhancement
+
+    # 收集所有结构 JSON
+    all_structs = sorted(STRUCTURE_DIR.glob("page_*.json"))
+    if not all_structs:
+        print(f"[错误] {STRUCTURE_DIR} 中没有结构 JSON，请先运行 structure.py")
+        sys.exit(1)
+
+    all_nums = [int(p.stem.split("_")[1]) for p in all_structs]
+    print(f"[Phase 2b] 共找到 {len(all_nums)} 页结构数据")
+
+    target_nums = parse_pages_arg(args.pages, max(all_nums))
+    target_nums = [n for n in target_nums if n in all_nums]
+
+    if not args.force:
+        pending = [n for n in target_nums
+                   if not (OUT_DIR / f"page_{n:03d}.json").exists()]
+        skipped_pre = len(target_nums) - len(pending)
+        if skipped_pre:
+            print(f"[Phase 2b] 跳过已处理 {skipped_pre} 页（--force 可强制重跑）")
+    else:
+        pending = target_nums
+
+    if not pending:
+        print("[Phase 2b] 所有指定页面已处理完毕。")
+        return
+
+    print(f"[Phase 2b] 待处理 {len(pending)} 页，增强模式={args.enhancement}\n")
+
+    gemini_client = create_gemini_client()
+    claude_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY)
+
+    t_start = time.time()
+    results: dict[int, tuple[str, dict]] = {}
+
+    # 顺序处理（Gemini 免费额度有并发限制）
+    for n in pending:
+        pn, status, stats = process_page(
+            n, gemini_client, claude_client, args.force, forced_level, corrections_map
+        )
+        results[pn] = (status, stats)
+        key = f"page_{pn:03d}"
+
+        if status == "ok":
+            conf_str = f"{stats['avg_confidence']:.2f}" if stats.get("avg_confidence") else "N/A"
+            jp_warn = f"  ⚠ {stats['japanese']}个日文字" if stats["japanese"] else ""
+            print(f"[{key}] ✓  文字块:{stats['text_blocks']}  "
+                  f"标注:{stats['label_regions']}  修正:{stats['corrections']}  "
+                  f"置信度:{conf_str}  {stats['elapsed']:.1f}s{jp_warn}")
+        elif status not in ("skip", "skip_illus_only"):
+            print(f"[{key}] ✗  {status}")
+
+    # 汇总
+    elapsed_total = time.time() - t_start
+    ok_list = [n for n, (s, _) in results.items() if s == "ok"]
+    err_list = [n for n, (s, _) in results.items() if s == "error"]
+    all_confs = [
+        stats["avg_confidence"]
+        for _, (s, stats) in results.items()
+        if s == "ok" and stats.get("avg_confidence") is not None
+    ]
+    global_avg_conf = sum(all_confs) / len(all_confs) if all_confs else None
+    total_jp_chars = sum(
+        stats.get("japanese", 0)
+        for _, (s, stats) in results.items() if s == "ok"
+    )
+    conf_ranking = sorted(
+        [(n, stats["avg_confidence"])
+         for n, (s, stats) in results.items()
+         if s == "ok" and stats.get("avg_confidence") is not None],
+        key=lambda x: x[1],
+    )
+
+    print()
+    print("─" * 50)
+    print(f"[Phase 2b] 汇总")
+    print(f"  成功    : {len(ok_list)} 页")
+    if err_list:
+        print(f"  失败    : {[f'page_{n:03d}' for n in err_list]}")
+    if global_avg_conf is not None:
+        print(f"  平均置信度 : {global_avg_conf:.3f}")
+    if total_jp_chars:
+        print(f"  ⚠ 日文字符: {total_jp_chars} 处，需人工确认")
+    if conf_ranking[:5]:
+        print("  低置信度页面（需校对）:")
+        for n, c in conf_ranking[:5]:
+            print(f"    page_{n:03d}: {c:.3f}")
+    print(f"  总耗时  : {elapsed_total:.1f}s")
+    print(f"  输出目录: {OUT_DIR}")
+    print("─" * 50)
+
+
+if __name__ == "__main__":
+    main()
+
