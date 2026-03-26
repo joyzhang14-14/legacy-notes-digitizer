@@ -30,7 +30,7 @@ from PIL import Image
 
 # 优先加载项目根目录的 .env 文件
 _ROOT = Path(__file__).parent.parent
-load_dotenv(_ROOT / ".env")
+load_dotenv(_ROOT / ".env", override=True)
 
 _GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 _ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
@@ -827,7 +827,10 @@ def main():
     print(f"[Phase 2b] 待处理 {len(pending)} 页，增强模式={args.enhancement}\n")
 
     gemini_client = create_gemini_client()
-    claude_client = anthropic.Anthropic(api_key=_ANTHROPIC_API_KEY)
+    claude_client = anthropic.Anthropic(
+        api_key=_ANTHROPIC_API_KEY,
+        base_url="https://api.anthropic.com",  # 显式指定官方 API，忽略 shell 里的 ANTHROPIC_BASE_URL
+    )
 
     t_start = time.time()
     results: dict[int, tuple[str, dict]] = {}

@@ -19,13 +19,16 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import anthropic
+from dotenv import dotenv_values
 from PIL import Image
 
-# ─────────────────────────── API Key ───────────────────────────
+# ─────────────────────────── API Key（从 .env 读取，不受 shell 代理环境变量影响）───────────────────────────
 
-_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
+_ROOT = Path(__file__).parent.parent
+_ENV = dotenv_values(_ROOT / ".env")
+_API_KEY = _ENV.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
 if not _API_KEY:
-    print("[错误] 未找到 ANTHROPIC_API_KEY 环境变量，请先 export ANTHROPIC_API_KEY=...")
+    print("[错误] 未找到 ANTHROPIC_API_KEY，请在 .env 文件中设置")
     sys.exit(1)
 
 # ─────────────────────────── 路径 ───────────────────────────
@@ -535,7 +538,10 @@ def main():
 
     print(f"[Phase 1] 待分析 {len(pending)} 页，并发数 {MAX_CONCURRENT}\n")
 
-    client = anthropic.Anthropic(api_key=_API_KEY)
+    client = anthropic.Anthropic(
+        api_key=_API_KEY,
+        base_url="https://api.anthropic.com",  # 显式指定官方 API，忽略 shell 里的 ANTHROPIC_BASE_URL
+    )
     t_start = time.time()
     results: dict[int, tuple[str, dict | None]] = {}
 
