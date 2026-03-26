@@ -1,0 +1,330 @@
+{
+  "page_number": 3,
+  "raw": [
+    {
+      "region_id": "r1",
+      "round1": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "教孙子",
+            "y_px": 66,
+            "x_px": 204,
+            "char_height_px": 114,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round2": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "教故子",
+            "y_px": 42,
+            "x_px": 210,
+            "char_height_px": 60,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round3": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "裁故子",
+            "y_px": 54,
+            "x_px": 207,
+            "char_height_px": 87,
+            "char_width_px": 30,
+            "line_height_px": 95,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.75
+          }
+        ],
+        "corrections": [
+          {
+            "original": "教孙子",
+            "corrected": "裁故子",
+            "reason": "根据服装设计专业语境，第一个字更可能是'裁'而非'教'，但第二、三个字的识别存在不确定性"
+          },
+          {
+            "original": "教故子",
+            "corrected": "裁故子",
+            "reason": "同上，第一个字应为'裁'"
+          }
+        ],
+        "page_confidence": 0.75
+      }
+    },
+    {
+      "region_id": "r2",
+      "round1": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "因为考虑到服装效果图主要突出",
+            "y_px": 102,
+            "x_px": 218,
+            "char_height_px": 111,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          },
+          {
+            "line_num": 2,
+            "content": "学生在前两年的学习中已接触很多绘画",
+            "y_px": 273,
+            "x_px": 45,
+            "char_height_px": 100,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          },
+          {
+            "line_num": 3,
+            "content": "方面的。绘画课的教学内容。因此在",
+            "y_px": 427,
+            "x_px": 48,
+            "char_height_px": 93,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round2": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "因为考虑到服装效果图主要突出",
+            "y_px": 86,
+            "x_px": 249,
+            "char_height_px": 96,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          },
+          {
+            "line_num": 2,
+            "content": "学生在前两年的学习中已接触很多绘画",
+            "y_px": 341,
+            "x_px": 82,
+            "char_height_px": 101,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          },
+          {
+            "line_num": 3,
+            "content": "宜再重复绘画课的教学内容。因此在",
+            "y_px": 541,
+            "x_px": 82,
+            "char_height_px": 98,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round3": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "因为考虑到服装效果图主要突出",
+            "y_px": 94,
+            "x_px": 234,
+            "char_height_px": 104,
+            "char_width_px": 104,
+            "line_height_px": 120,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.95
+          },
+          {
+            "line_num": 2,
+            "content": "学生在前两年的学习中已接触很多绘画",
+            "y_px": 307,
+            "x_px": 64,
+            "char_height_px": 101,
+            "char_width_px": 101,
+            "line_height_px": 117,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.95
+          },
+          {
+            "line_num": 3,
+            "content": "方面的基础绘画课的教学内容。因此不",
+            "y_px": 484,
+            "x_px": 65,
+            "char_height_px": 96,
+            "char_width_px": 96,
+            "line_height_px": 111,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.88
+          }
+        ],
+        "corrections": [
+          {
+            "original": "方面的。绘画课",
+            "corrected": "方面的基础绘画课",
+            "reason": "根据上下文语义，应该是'基础绘画课'更符合教学内容的描述"
+          },
+          {
+            "original": "因此在",
+            "corrected": "因此不",
+            "reason": "根据上下文逻辑，前面说已经接触很多绘画基础，后面应该是'因此不宜再重复'的否定语义"
+          }
+        ],
+        "page_confidence": 0.93
+      }
+    },
+    {
+      "region_id": "r3",
+      "round1": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "油玄如七",
+            "y_px": 133,
+            "x_px": 257,
+            "char_height_px": 76,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round2": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "袖山高扣七",
+            "y_px": 76,
+            "x_px": 100,
+            "char_height_px": 70,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round3": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "袖山高七",
+            "y_px": 105,
+            "x_px": 179,
+            "char_height_px": 73,
+            "char_width_px": 73,
+            "line_height_px": 73,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.85
+          }
+        ],
+        "corrections": [
+          {
+            "original": "油玄如七",
+            "corrected": "袖山高七",
+            "reason": "结合服装设计术语，'袖山高'是专业术语，表示袖子山头的高度；'油玄如'无意义"
+          },
+          {
+            "original": "袖山高扣七",
+            "corrected": "袖山高七",
+            "reason": "根据手写体识别，最后一个字更像是'七'而非'扣七'，且'袖山高七'符合服装制版中的尺寸标注习惯"
+          }
+        ],
+        "page_confidence": 0.85
+      }
+    },
+    {
+      "region_id": "r4",
+      "round1": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "免开设 7-",
+            "y_px": 45,
+            "x_px": 18,
+            "char_height_px": 72,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round2": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "免开设 7-",
+            "y_px": 129,
+            "x_px": 25,
+            "char_height_px": 108,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false
+          }
+        ]
+      },
+      "round3": {
+        "lines": [
+          {
+            "line_num": 1,
+            "content": "免开领 7-",
+            "y_px": 87,
+            "x_px": 22,
+            "char_height_px": 90,
+            "char_width_px": 30,
+            "line_height_px": 45,
+            "color": "black",
+            "direction": "horizontal",
+            "is_title": false,
+            "font_level": "body",
+            "confidence": 0.75
+          }
+        ],
+        "corrections": [
+          {
+            "original": "免开设",
+            "corrected": "免开领",
+            "reason": "结合服装设计专业术语，'免开领'是服装制作中的专业术语，指不开襟的领型设计，而'免开设'在此上下文中语义不通"
+          }
+        ],
+        "page_confidence": 0.75
+      }
+    },
+    {
+      "region_id": "r5",
+      "round1": {
+        "lines": []
+      },
+      "round2": {
+        "lines": []
+      },
+      "round3": {
+        "lines": [],
+        "corrections": [],
+        "page_confidence": 0.0
+      }
+    }
+  ]
+}

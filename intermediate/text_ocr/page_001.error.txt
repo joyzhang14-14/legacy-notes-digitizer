@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 698, in process_page
+    result = ocr_text_block(
+        gemini_client, claude_client, img_bgr, region, forced_level
+    )
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 582, in ocr_text_block
+    round2_parsed = gemini_round2(gemini_client, versions, region_id)
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 340, in gemini_round2
+    return parse_json_response(raw)
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 198, in parse_json_response
+    cleaned = text.strip()
+              ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'strip'

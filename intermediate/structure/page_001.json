@@ -1,0 +1,450 @@
+{
+  "page_number": 1,
+  "page_width_px": 1200,
+  "page_height_px": 1600,
+  "orientation_confirmed": true,
+  "layout_summary": "这是一页手写教案，采用传统的大纲式布局。页面顶部有标题，内容分为两个主要部分：服装目的和服装内容。文字以列表和段落形式组织，没有插图或图表。整体布局清晰，层次分明。",
+  "regions": [
+    {
+      "id": "r1",
+      "type": "PAGE_META",
+      "bbox": [
+        450,
+        50,
+        300,
+        50
+      ],
+      "description": "页面标题：服装课程内容",
+      "confidence": 0.9,
+      "related_to": []
+    },
+    {
+      "id": "r2",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        50,
+        120,
+        100,
+        40
+      ],
+      "description": "标题：服装目的",
+      "confidence": 0.95,
+      "related_to": [
+        "r3"
+      ],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 120,
+          "content": "一、服装目的：",
+          "uncertain_chars": [],
+          "font_level": "subtitle",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 120,
+          "x_px": 50,
+          "char_height_px": 30,
+          "char_width_px": 28,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        150,
+        180,
+        800,
+        120
+      ],
+      "description": "正文段落：关于服装设计的目的和功能的详细说明",
+      "confidence": 0.9,
+      "related_to": [
+        "r2"
+      ],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 180,
+          "content": "通过教授服装裁剪制作，设计，裁剪、缝制妇女内衣至3周年服装，光",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 180,
+          "x_px": 150,
+          "char_height_px": 28,
+          "char_width_px": 26,
+          "line_spacing_px": 8
+        },
+        {
+          "line_num": 2,
+          "y_position": 216,
+          "content": "白天心理、心会服装制作为的技能，首提服装设计的审美效，提高服装",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 216,
+          "x_px": 150,
+          "char_height_px": 28,
+          "char_width_px": 26,
+          "line_spacing_px": 8
+        },
+        {
+          "line_num": 3,
+          "y_position": 252,
+          "content": "的审美能力。这是为了让学生知名服装是怎样产生具有的觉?视觉?。",
+          "uncertain_chars": [
+            "?"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 252,
+          "x_px": 150,
+          "char_height_px": 28,
+          "char_width_px": 26,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r4",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        50,
+        340,
+        100,
+        40
+      ],
+      "description": "标题：服装内容",
+      "confidence": 0.95,
+      "related_to": [
+        "r5",
+        "r6"
+      ],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 340,
+          "content": "二、服装内容：",
+          "uncertain_chars": [],
+          "font_level": "subtitle",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 340,
+          "x_px": 50,
+          "char_height_px": 30,
+          "char_width_px": 28,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r5",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        390,
+        200,
+        80
+      ],
+      "description": "子标题1：服装材料",
+      "confidence": 0.9,
+      "related_to": [
+        "r4",
+        "r6"
+      ],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 390,
+          "content": "1、服装材料：",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 390,
+          "x_px": 100,
+          "char_height_px": 28,
+          "char_width_px": 26,
+          "line_spacing_px": 15
+        },
+        {
+          "line_num": 2,
+          "y_position": 433,
+          "content": "服装材料的能力选择简介。服装材料的分类、性质、用途",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 433,
+          "x_px": 150,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r6",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        490,
+        800,
+        550
+      ],
+      "description": "列表内容：包含多个服装相关概念的详细列表，如裙装、裤装等各类服装的分类说明",
+      "confidence": 0.85,
+      "related_to": [
+        "r4",
+        "r5"
+      ],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 490,
+          "content": "2、服装制作一设计：",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 490,
+          "x_px": 100,
+          "char_height_px": 28,
+          "char_width_px": 26,
+          "line_spacing_px": 15
+        },
+        {
+          "line_num": 2,
+          "y_position": 533,
+          "content": "① 裙：规则的裙构原理、3种?传统的裳形、裳体",
+          "uncertain_chars": [
+            "?"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 533,
+          "x_px": 150,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 3,
+          "y_position": 569,
+          "content": "各种规则式前5制作",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 569,
+          "x_px": 200,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 4,
+          "y_position": 605,
+          "content": "褶裙规则式前5制作",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 605,
+          "x_px": 200,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 5,
+          "y_position": 641,
+          "content": "筒裙规则式前5制作",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 641,
+          "x_px": 200,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 6,
+          "y_position": 677,
+          "content": "② 女裤的制作：文字连图=皮?的构作",
+          "uncertain_chars": [
+            "?"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 677,
+          "x_px": 150,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 7,
+          "y_position": 713,
+          "content": "基本的图解力",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 713,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 8,
+          "y_position": 749,
+          "content": "特定材料对裤版",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 749,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 9,
+          "y_position": 785,
+          "content": "基本高从5缝制2版",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 785,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 10,
+          "y_position": 821,
+          "content": "（西裤）（合身）",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 821,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 11,
+          "y_position": 857,
+          "content": "直立裤（宽制）",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 857,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 12,
+          "y_position": 893,
+          "content": "短裤、背蔓装",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 893,
+          "x_px": 300,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 13,
+          "y_position": 929,
+          "content": "③ 5个项",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 929,
+          "x_px": 150,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 14,
+          "y_position": 965,
+          "content": "衬衣服装的设计与制图、?衫",
+          "uncertain_chars": [
+            "?"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 965,
+          "x_px": 200,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 10
+        },
+        {
+          "line_num": 15,
+          "y_position": 1001,
+          "content": "文胸裙装个人要求设计一制裁?。",
+          "uncertain_chars": [
+            "?"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 1001,
+          "x_px": 200,
+          "char_height_px": 26,
+          "char_width_px": 24,
+          "line_spacing_px": 0
+        }
+      ]
+    }
+  ]
+}

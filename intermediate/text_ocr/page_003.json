@@ -1,0 +1,212 @@
+{
+  "page_number": 3,
+  "ocr_engine": "gemini-2.5-pro + claude-opus-4-20250514",
+  "text_regions": [
+    {
+      "region_id": "r1",
+      "region_type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        150,
+        300,
+        80
+      ],
+      "enhancement_level_used": "extreme",
+      "lines": [
+        {
+          "line_num": 1,
+          "content": "裁故子",
+          "y_px": 54,
+          "x_px": 207,
+          "char_height_px": 87,
+          "char_width_px": 30,
+          "line_height_px": 95,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.75
+        }
+      ],
+      "corrections_applied": [
+        {
+          "original": "教孙子",
+          "corrected": "裁故子",
+          "reason": "根据服装设计专业语境，第一个字更可能是'裁'而非'教'，但第二、三个字的识别存在不确定性"
+        },
+        {
+          "original": "教故子",
+          "corrected": "裁故子",
+          "reason": "同上，第一个字应为'裁'"
+        }
+      ],
+      "overall_confidence": 0.75,
+      "japanese_chars_detected": 0
+    },
+    {
+      "region_id": "r2",
+      "region_type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        280,
+        1400,
+        400
+      ],
+      "enhancement_level_used": "extreme",
+      "lines": [
+        {
+          "line_num": 1,
+          "content": "因为考虑到服装效果图主要突出",
+          "y_px": 94,
+          "x_px": 234,
+          "char_height_px": 104,
+          "char_width_px": 104,
+          "line_height_px": 120,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.95
+        },
+        {
+          "line_num": 2,
+          "content": "学生在前两年的学习中已接触很多绘画",
+          "y_px": 307,
+          "x_px": 64,
+          "char_height_px": 101,
+          "char_width_px": 101,
+          "line_height_px": 117,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.95
+        },
+        {
+          "line_num": 3,
+          "content": "方面的基础绘画课的教学内容。因此不",
+          "y_px": 484,
+          "x_px": 65,
+          "char_height_px": 96,
+          "char_width_px": 96,
+          "line_height_px": 111,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.88
+        }
+      ],
+      "corrections_applied": [
+        {
+          "original": "方面的。绘画课",
+          "corrected": "方面的基础绘画课",
+          "reason": "根据上下文语义，应该是'基础绘画课'更符合教学内容的描述"
+        },
+        {
+          "original": "因此在",
+          "corrected": "因此不",
+          "reason": "根据上下文逻辑，前面说已经接触很多绘画基础，后面应该是'因此不宜再重复'的否定语义"
+        }
+      ],
+      "overall_confidence": 0.93,
+      "japanese_chars_detected": 0
+    },
+    {
+      "region_id": "r3",
+      "region_type": "TEXT_BLOCK",
+      "bbox": [
+        400,
+        750,
+        400,
+        80
+      ],
+      "enhancement_level_used": "extreme",
+      "lines": [
+        {
+          "line_num": 1,
+          "content": "袖山高七",
+          "y_px": 105,
+          "x_px": 179,
+          "char_height_px": 73,
+          "char_width_px": 73,
+          "line_height_px": 73,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.85
+        }
+      ],
+      "corrections_applied": [
+        {
+          "original": "油玄如七",
+          "corrected": "袖山高七",
+          "reason": "结合服装设计术语，'袖山高'是专业术语，表示袖子山头的高度；'油玄如'无意义"
+        },
+        {
+          "original": "袖山高扣七",
+          "corrected": "袖山高七",
+          "reason": "根据手写体识别，最后一个字更像是'七'而非'扣七'，且'袖山高七'符合服装制版中的尺寸标注习惯"
+        }
+      ],
+      "overall_confidence": 0.85,
+      "japanese_chars_detected": 0
+    },
+    {
+      "region_id": "r4",
+      "region_type": "TEXT_BLOCK",
+      "bbox": [
+        900,
+        750,
+        300,
+        80
+      ],
+      "enhancement_level_used": "extreme",
+      "lines": [
+        {
+          "line_num": 1,
+          "content": "免开领 7-",
+          "y_px": 87,
+          "x_px": 22,
+          "char_height_px": 90,
+          "char_width_px": 30,
+          "line_height_px": 45,
+          "color": "black",
+          "direction": "horizontal",
+          "is_title": false,
+          "font_level": "body",
+          "confidence": 0.75
+        }
+      ],
+      "corrections_applied": [
+        {
+          "original": "免开设",
+          "corrected": "免开领",
+          "reason": "结合服装设计专业术语，'免开领'是服装制作中的专业术语，指不开襟的领型设计，而'免开设'在此上下文中语义不通"
+        }
+      ],
+      "overall_confidence": 0.75,
+      "japanese_chars_detected": 0
+    },
+    {
+      "region_id": "r5",
+      "region_type": "TEXT_BLOCK",
+      "bbox": [
+        900,
+        900,
+        300,
+        50
+      ],
+      "enhancement_level_used": "extreme",
+      "lines": [],
+      "corrections_applied": [],
+      "overall_confidence": 0.0,
+      "japanese_chars_detected": 0
+    }
+  ],
+  "label_regions": [],
+  "dimension_regions": [],
+  "japanese_chars_detected": 0,
+  "average_confidence": 0.656
+}

@@ -1,0 +1,219 @@
+{
+  "page_number": 3,
+  "page_width_px": 1654,
+  "page_height_px": 2339,
+  "orientation_confirmed": true,
+  "layout_summary": "本页主要为文字内容页面，包含一个标题和一个主要文字段落，以及几个分散的独立文字标注。整体布局简洁，以文字记录为主，无插图或图表。",
+  "regions": [
+    {
+      "id": "r1",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        150,
+        300,
+        80
+      ],
+      "description": "标题：表达的目的",
+      "confidence": 0.95,
+      "related_to": [],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 150,
+          "content": "表达的目的",
+          "uncertain_chars": [],
+          "font_level": "title",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 150,
+          "x_px": 100,
+          "char_height_px": 45,
+          "char_width_px": 45,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        100,
+        280,
+        1400,
+        400
+      ],
+      "description": "主要文字段落，描述服装设计相关内容，包含多行手写中文文字",
+      "confidence": 0.9,
+      "related_to": [],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 280,
+          "content": "固有充实的服装衣料围主要表达传统特点和表现方式，它",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 280,
+          "x_px": 100,
+          "char_height_px": 32,
+          "char_width_px": 30,
+          "line_spacing_px": 18
+        },
+        {
+          "line_num": 2,
+          "y_position": 330,
+          "content": "准确简洁的表示中已增加细致准确品知识...服装设计材料又",
+          "uncertain_chars": [
+            "知"
+          ],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 330,
+          "x_px": 100,
+          "char_height_px": 32,
+          "char_width_px": 30,
+          "line_spacing_px": 18
+        },
+        {
+          "line_num": 3,
+          "y_position": 380,
+          "content": "更具灵活性元素的变动内容。围内在4-7围的表达中10个主要设",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 380,
+          "x_px": 100,
+          "char_height_px": 32,
+          "char_width_px": 30,
+          "line_spacing_px": 18
+        },
+        {
+          "line_num": 4,
+          "y_position": 430,
+          "content": "置围内内容。如有特定活动7-8围，可丰富到8个设围内表达。",
+          "uncertain_chars": [],
+          "font_level": "body",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 430,
+          "x_px": 100,
+          "char_height_px": 32,
+          "char_width_px": 30,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        400,
+        750,
+        400,
+        80
+      ],
+      "description": "独立文字：仙女服装之中",
+      "confidence": 0.85,
+      "related_to": [],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 750,
+          "content": "仙女服装之中",
+          "uncertain_chars": [],
+          "font_level": "annotation",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 750,
+          "x_px": 400,
+          "char_height_px": 28,
+          "char_width_px": 28,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r4",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        900,
+        750,
+        300,
+        80
+      ],
+      "description": "独立文字：流动感小点",
+      "confidence": 0.85,
+      "related_to": [],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 750,
+          "content": "流动感小点",
+          "uncertain_chars": [],
+          "font_level": "annotation",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 750,
+          "x_px": 900,
+          "char_height_px": 28,
+          "char_width_px": 28,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r5",
+      "type": "TEXT_BLOCK",
+      "bbox": [
+        900,
+        900,
+        300,
+        50
+      ],
+      "description": "底部文字：服装之中",
+      "confidence": 0.8,
+      "related_to": [],
+      "lines": [
+        {
+          "line_num": 1,
+          "y_position": 900,
+          "content": "服装之中",
+          "uncertain_chars": [],
+          "font_level": "annotation",
+          "color": "black",
+          "direction": "horizontal",
+          "has_emphasis": false,
+          "y_px": 900,
+          "x_px": 900,
+          "char_height_px": 25,
+          "char_width_px": 25,
+          "line_spacing_px": 0
+        }
+      ]
+    },
+    {
+      "id": "r6",
+      "type": "PAGE_META",
+      "bbox": [
+        1550,
+        2250,
+        50,
+        50
+      ],
+      "description": "页码：3",
+      "confidence": 0.95,
+      "related_to": []
+    }
+  ]
+}
