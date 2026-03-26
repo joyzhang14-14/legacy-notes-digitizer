@@ -18,16 +18,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import anthropic
-from dotenv import load_dotenv
 from PIL import Image
 
-# ─────────────────────────── 环境变量 ───────────────────────────
-
-load_dotenv()
+# ─────────────────────────── API Key ───────────────────────────
 
 _API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 if not _API_KEY:
-    print("[错误] 未找到 ANTHROPIC_API_KEY，请在 .env 中配置或 export ANTHROPIC_API_KEY=...")
+    print("[错误] 未找到 ANTHROPIC_API_KEY 环境变量，请先 export ANTHROPIC_API_KEY=...")
     sys.exit(1)
 
 # ─────────────────────────── 路径 ───────────────────────────
@@ -37,16 +34,31 @@ INPUT_DIR = ROOT / "input"
 PAGES_DIR = ROOT / "intermediate" / "pages"
 LOG_PATH = ROOT / "intermediate" / "orientation_log.json"
 
-MODEL = "claude-sonnet-4-20250514"
-MAX_SIDE = 800       # 方向检测缩小到长边800px，节省token
+MODEL = "claude-opus-4-20250514"
+MAX_SIDE = 800
 MAX_CONCURRENT = 3
 
 # ─────────────────────────── Prompt ───────────────────────────
 
 ORIENTATION_PROMPT = """\
-这是一页手写中文教案的扫描件。请判断方向是否正确。
-中文文字应该从左到右、从上到下。
-只返回一个数字：0（正确）/ 90 / 180 / 270（需顺时针旋转的角度）\
+你看到的是一页手写中文教案的扫描件。这份教案来自中央美术学院服装设计专业。
+
+请判断这张图片的方向是否正确。
+
+判断依据：
+- 中文文字应该是从左到右、从上到下书写
+- 标题通常在页面顶部
+- 页码通常在页面顶部右侧或底部
+- 如果有竖排文字，整体页面仍应是正向的
+
+请返回需要旋转的角度（顺时针）：
+- 0: 方向正确，不需要旋转
+- 90: 需要顺时针旋转90度
+- 180: 需要旋转180度
+- 270: 需要顺时针旋转270度（即逆时针90度）
+
+只返回一个数字，不要其他内容：
+0 或 90 或 180 或 270\
 """
 
 # ─────────────────────────── 页面拆分 ───────────────────────────
@@ -54,7 +66,10 @@ ORIENTATION_PROMPT = """\
 def extract_pages(input_dir: Path, output_dir: Path, dpi: int = 300) -> int:
     """将 input_dir 中所有 PDF/图片拆分为单页 PNG，返回总页数。"""
     output_dir.mkdir(parents=True, exist_ok=True)
-    files = sorted(glob.glob(str(input_dir / "*")), key=os.path.basename)
+    files = sorted(
+        glob.glob(str(input_dir / "*")),
+        key=lambda f: os.path.basename(f)
+    )
     page_num = 0
     for fpath in files:
         ext = os.path.splitext(fpath)[1].lower()
@@ -64,28 +79,25 @@ def extract_pages(input_dir: Path, output_dir: Path, dpi: int = 300) -> int:
             except ImportError:
                 print("[错误] 缺少 pdf2image，请运行: pip install pdf2image")
                 sys.exit(1)
-            pages = convert_from_path(fpath, dpi=dpi)
-            for page in pages:
+            images = convert_from_path(fpath, dpi=dpi)
+            for img in images:
                 page_num += 1
                 out_path = output_dir / f"page_{page_num:03d}.png"
-                page.save(out_path, "PNG")
-                size_mb = out_path.stat().st_size / 1024 / 1024
-                print(f"  [拆分] page_{page_num:03d}.png  ({size_mb:.1f}MB)")
-        elif ext in (".png", ".jpg", ".jpeg", ".tiff", ".tif", ".bmp"):
+                img.save(out_path)
+                print(f"  [拆分] {os.path.basename(fpath)} → {out_path.name}")
+        elif ext in (".jpg", ".jpeg", ".png", ".tiff", ".tif"):
             page_num += 1
             out_path = output_dir / f"page_{page_num:03d}.png"
             img = Image.open(fpath)
-            img.save(out_path, "PNG")
-            size_mb = out_path.stat().st_size / 1024 / 1024
-            print(f"  [拆分] page_{page_num:03d}.png  ({size_mb:.1f}MB)")
+            img.save(out_path)
+            print(f"  [拆分] {os.path.basename(fpath)} → {out_path.name}")
     return page_num
 
 # ─────────────────────────── 方向检测 ───────────────────────────
 
 def detect_orientation(image_path: Path, client: anthropic.Anthropic) -> int:
-    """用 Claude Vision 检测方向，返回需顺时针旋转的角度（0/90/180/270）。"""
+    """调用 Claude Vision 检测图片需要顺时针旋转的角度（0/90/180/270）。"""
     img = Image.open(image_path)
-    # 缩小到长边800px（方向检测不需要高分辨率）
     ratio = min(MAX_SIDE / img.width, MAX_SIDE / img.height)
     if ratio < 1:
         new_size = (int(img.width * ratio), int(img.height * ratio))
@@ -113,19 +125,10 @@ def detect_orientation(image_path: Path, client: anthropic.Anthropic) -> int:
         }],
     )
     raw = response.content[0].text.strip()
-    # 先尝试直接解析
-    try:
-        angle = int(raw)
-        if angle in (0, 90, 180, 270):
-            return angle
-    except ValueError:
-        pass
-    # 兜底：从文字中提取第一个出现的 0/90/180/270
-    import re
-    m = re.search(r'\b(270|180|90|0)\b', raw)
-    if m:
-        return int(m.group(1))
-    raise ValueError(f"无法从响应中提取角度: {raw[:80]!r}")
+    angle = int(raw)
+    if angle not in (0, 90, 180, 270):
+        raise ValueError(f"意外的角度值: {raw!r}")
+    return angle
 
 
 def rotate_if_needed(image_path: Path, angle: int) -> None:
@@ -139,7 +142,7 @@ def rotate_if_needed(image_path: Path, angle: int) -> None:
 # ─────────────────────────── 范围解析 ───────────────────────────
 
 def parse_pages_arg(pages_str: str, total: int) -> list[int]:
-    """解析 --pages 参数，返回1-based页码列表。支持 "1-5" / "2,4,6" / "3"。"""
+    """解析 --pages 参数，返回 1-based 页码列表。支持 "1-5" / "2,4,6" / "3"。"""
     result = set()
     for part in pages_str.split(","):
         part = part.strip()
@@ -173,7 +176,9 @@ def main():
         print(f"[Phase 0] 已找到 {len(existing)} 页（跳过拆分，如需重新拆分请删除 intermediate/pages/）\n")
 
     # ── 2. 确定待处理页码 ──
-    all_page_nums = [int(p.stem.split("_")[1]) for p in existing]
+    all_page_nums = [
+        int(p.stem.split("_")[1]) for p in existing
+    ]
     if args.pages:
         target_nums = parse_pages_arg(args.pages, max(all_page_nums))
         target_nums = [n for n in target_nums if n in all_page_nums]
@@ -206,6 +211,7 @@ def main():
     client = anthropic.Anthropic(api_key=_API_KEY)
 
     def process_page(page_num: int) -> tuple[int, int, str]:
+        """返回 (page_num, angle, status_msg)"""
         key = f"page_{page_num:03d}"
         img_path = PAGES_DIR / f"{key}.png"
         angle = detect_orientation(img_path, client)
@@ -228,7 +234,7 @@ def main():
             except Exception as e:
                 key = f"page_{page_num:03d}"
                 print(f"[{key}] 检测失败: {e}")
-                results[page_num] = -1
+                results[page_num] = -1  # 标记失败
 
     # ── 6. 更新日志 ──
     for pn, angle in results.items():

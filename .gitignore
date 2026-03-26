@@ -2,9 +2,12 @@
 
 # 大文件目录（PDF/图片/输出文件）
 input/
+intermediate/
 output/
 
 # Python 缓存
 src/__pycache__/
 __pycache__/
 *.pyc
+venv/
+

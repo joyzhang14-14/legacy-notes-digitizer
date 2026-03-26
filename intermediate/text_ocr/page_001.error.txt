@@ -1,13 +1,27 @@
 Traceback (most recent call last):
-  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 698, in process_page
-    result = ocr_text_block(
-        gemini_client, claude_client, img_bgr, region, forced_level
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/ocr.py", line 405, in process_page
+    result = remap_positions(claude_client, structure, round1_text, round2_text, img_path)
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/ocr.py", line 316, in remap_positions
+    response = claude_client.messages.create(
+        model=CLAUDE_MODEL,
+    ...<14 lines>...
+        }],
     )
-  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 582, in ocr_text_block
-    round2_parsed = gemini_round2(gemini_client, versions, region_id)
-  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 340, in gemini_round2
-    return parse_json_response(raw)
-  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/src/text_ocr.py", line 198, in parse_json_response
-    cleaned = text.strip()
-              ^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'strip'
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_utils/_utils.py", line 282, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/resources/messages/messages.py", line 996, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<30 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1364, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joyzhang14/Projects/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1137, in request
+    raise self._make_status_error_from_response(err.response) from None
+anthropic.AuthenticationError: Error code: 401 - {'error': '请在请求中提供有效的 API Key，配置方法请参考 https://docs.aicodewith.com/'}
