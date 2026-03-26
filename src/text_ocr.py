@@ -341,3 +341,173 @@ def gemini_round2(
     except (json.JSONDecodeError, ValueError):
         print(f"  [Round2] {region_id} JSON 解析失败，返回空结果")
         return {"lines": []}
+
+
+# ─────────────────────────── Round 3 Prompt & Claude 校验 ───────────────────────────
+
+ROUND3_PROMPT_TEMPLATE = """\
+你是服装设计和人体解剖学的专家。
+下面是同一段手写中文教案的两次独立 OCR 结果（由 Gemini 识别）。
+我也提供了原始图片供你参考。
+
+## Gemini 第一次识别结果：
+{round1_json}
+
+## Gemini 第二次识别结果：
+{round2_json}
+
+## 专业术语参考词典：
+
+### 服装裁剪/设计：
+胸省、肩省、腰省、肋省、袖孔省、领孔省、省道、省尖、省量、
+原型、衣身原型、裁片、缝份、放码、打版、制图、
+前片、后片、袖片、领片、裁剪、缝制、
+胸围线、腰围线、臀围线、袖笼线、领围线、
+贴边、挂面、里布、衬布、粘合衬、
+公主线、刀背缝、分割线、面料、
+省道转移、省道设计、省道变化、
+A字型、H型、X型、T型、
+款式图、效果图、结构图、样板、
+
+### 人体解剖：
+骨骼、脊柱、颈椎、胸椎、腰椎、骶骨、尾骨、
+肋骨、胸骨、锁骨、肩胛骨、肱骨、桡骨、尺骨、
+骨盆、髂骨、股骨、胫骨、腓骨、
+胸大肌、三角肌、斜方肌、背阔肌、
+腹直肌、腹外斜肌、臀大肌、股四头肌、腓肠肌、比目鱼肌、
+体表标志、颈窝、乳点、肩点、人体比例、
+
+### 教学术语：
+教学目的、教学内容、教学方法、教学重点、教学难点、
+讲授、示范、练习、作业、考核、课时、教案、大纲、
+任课教师、教学安排、预备、
+
+## 任务：
+1. 对比两次结果，找出所有差异
+2. 对每处差异，结合上下文语义和专业术语判断正确文字
+3. 修正明显的语义错误：
+   - 如 "我穿" 可能是 "裁片" 或 "裁剪"
+   - "异形" 可能是 "造型"
+   - 如果出现日文字符，替换为最接近的中文
+4. 保留位置信息（y_px, x_px, char_height_px），两轮不一致时取平均值
+
+## 输出格式（严格JSON，无其他内容）：
+{{
+  "lines": [
+    {{
+      "line_num": 1,
+      "content": "最终准确文字",
+      "y_px": 50,
+      "x_px": 30,
+      "char_height_px": 35,
+      "char_width_px": 30,
+      "line_height_px": 45,
+      "color": "black",
+      "direction": "horizontal",
+      "is_title": false,
+      "font_level": "title|subtitle|body|annotation|label",
+      "confidence": 0.92
+    }}
+  ],
+  "corrections": [
+    {{"original": "原始错误", "corrected": "修正后", "reason": "理由"}}
+  ],
+  "page_confidence": 0.88
+}}\
+"""
+
+LABEL_PROMPT = """\
+请识别这张图片中的标注文字。这是服装设计教案中的插图标注。
+
+图中有引线从文字标签指向插图的某个部位。请识别每个标签的文字内容。
+
+规则：
+1. 只有中文、英文、数字，没有日文
+2. 常见标注词：胸大肌、三角肌、腓肠肌、比目鱼肌、肩省、胸围线、前中心线、后中心线等
+3. 尺寸标注如：3~4, 0.5, H/4+10.5, W/2+3
+
+返回JSON（严格JSON，无其他内容）：
+{
+  "labels": [
+    {
+      "text": "标注文字",
+      "color": "red|black|blue",
+      "approximate_position": [x, y]
+    }
+  ],
+  "dimensions": [
+    {
+      "value": "H/4+10.5",
+      "approximate_position": [x, y]
+    }
+  ]
+}\
+"""
+
+
+def claude_round3(
+    claude_client: anthropic.Anthropic,
+    round1_parsed: dict,
+    round2_parsed: dict,
+    orig_crop: np.ndarray,
+    region_id: str,
+) -> dict:
+    """
+    Round 3：将 Gemini 两轮结果发给 Claude Opus，做语义校验 + 专业术语修复。
+    返回 parsed_json（含 lines / corrections / page_confidence）。
+    """
+    import base64
+
+    # 将原图编码为 base64 供 Claude 参考
+    pil = Image.fromarray(cv2.cvtColor(orig_crop, cv2.COLOR_BGR2RGB))
+    buf = io.BytesIO()
+    pil.save(buf, format="PNG")
+    orig_b64 = base64.standard_b64encode(buf.getvalue()).decode("utf-8")
+
+    round3_prompt = ROUND3_PROMPT_TEMPLATE.format(
+        round1_json=json.dumps(round1_parsed, ensure_ascii=False, indent=2),
+        round2_json=json.dumps(round2_parsed, ensure_ascii=False, indent=2),
+    )
+
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            time.sleep(CLAUDE_INTERVAL)
+            resp = claude_client.messages.create(
+                model=CLAUDE_MODEL,
+                max_tokens=8192,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/png",
+                                "data": orig_b64,
+                            },
+                        },
+                        {"type": "text", "text": round3_prompt},
+                    ],
+                }],
+            )
+            raw = resp.content[0].text
+            return parse_json_response(raw)
+        except anthropic.RateLimitError:
+            if attempt == MAX_RETRIES:
+                raise
+            print(f"  [Claude 429] 等待 {RATE_LIMIT_WAIT}s 后重试 ({attempt}/{MAX_RETRIES})...")
+            time.sleep(RATE_LIMIT_WAIT)
+        except (json.JSONDecodeError, ValueError):
+            print(f"  [Round3] {region_id} JSON 解析失败，降级使用 Round2 结果")
+            return {
+                "lines": round2_parsed.get("lines", []),
+                "corrections": [],
+                "page_confidence": 0.6,
+            }
+        except Exception as e:
+            if attempt == MAX_RETRIES:
+                raise
+            print(f"  [Claude 错误] {e}，5s 后重试...")
+            time.sleep(5)
+
+    raise RuntimeError(f"Claude Round3 {region_id} 所有重试均失败")
