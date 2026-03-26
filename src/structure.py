@@ -118,6 +118,26 @@ ROUND2_PROMPT_TEMPLATE = """\
 - 书写方向: horizontal / vertical
 - 行内是否有加粗或下划线
 
+### 额外要求：精确位置和字体大小估算
+
+对每行文字，还需要返回以下字段：
+- y_px: 该行顶部距离页面顶部的像素值
+- x_px: 该行左侧起始位置距离页面左侧的像素值
+- char_height_px: 单个字符的高度（像素）—— 这非常重要，直接影响最终排版
+- char_width_px: 单个字符的平均宽度（像素）
+- line_spacing_px: 行间距（当前行底部到下一行顶部的距离，最后一行填 0）
+
+估算方法：
+- 标题通常 40-60px 高
+- 正文通常 25-35px 高
+- 注释/标注通常 15-25px 高
+- 通过比较同一行中不同字的大小来获得平均值
+
+为什么重要：
+这些位置信息将直接用于最终文档的排版。
+如果字体大小不准确，文字和配图的相对位置会偏移。
+尤其是插图旁边的标注文字，位置必须和原始教案完全一致。
+
 ### 对 ILLUSTRATION 区域：
 返回：
 - 插图类型: skeleton(骨骼图) / pattern(版型图) / diagram(示意图) / figure(人体图) / other
@@ -158,7 +178,12 @@ ROUND2_PROMPT_TEMPLATE = """\
           "font_level": "title",
           "color": "black",
           "direction": "horizontal",
-          "has_emphasis": true
+          "has_emphasis": true,
+          "y_px": 120,
+          "x_px": 45,
+          "char_height_px": 48,
+          "char_width_px": 46,
+          "line_spacing_px": 12
         }}
       ]
     }},
