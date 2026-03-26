@@ -1,0 +1,191 @@
+{
+  "page_type": "text_only",
+  "page_width_px": 908,
+  "page_height_px": 1282,
+  "text_regions": [
+    {
+      "id": "t1",
+      "bbox": [
+        220,
+        45,
+        280,
+        35
+      ],
+      "content": "肋省道计及变化大纲",
+      "font_level": "title",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.95
+    },
+    {
+      "id": "t2",
+      "bbox": [
+        45,
+        120,
+        80,
+        25
+      ],
+      "content": "教学目的：",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.92
+    },
+    {
+      "id": "t3",
+      "bbox": [
+        125,
+        145,
+        750,
+        120
+      ],
+      "content": "通过教授肋省道种类、设计、载量、缝制等各个程序的目的在胸省设计，制作方面，会服装领片中本身的技能，者据胸省设计中的要领，提高胸省设计的异象能力，是具有对上述个人和各族女性表述中充息各仿的变系和参考。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.88
+    },
+    {
+      "id": "t4",
+      "bbox": [
+        45,
+        280,
+        80,
+        25
+      ],
+      "content": "教学内容：",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.93
+    },
+    {
+      "id": "t5",
+      "bbox": [
+        90,
+        320,
+        90,
+        25
+      ],
+      "content": "1. 肋省道类：",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.92
+    },
+    {
+      "id": "t6",
+      "bbox": [
+        180,
+        345,
+        650,
+        40
+      ],
+      "content": "肋省道类往多巳斜纱介，胸省种类的分类，个特点，用途",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t7",
+      "bbox": [
+        90,
+        400,
+        150,
+        25
+      ],
+      "content": "2. 肋省道体一般过程",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.9
+    },
+    {
+      "id": "t8",
+      "bbox": [
+        90,
+        450,
+        50,
+        25
+      ],
+      "content": "① 领片：",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.92
+    },
+    {
+      "id": "t9",
+      "bbox": [
+        140,
+        475,
+        650,
+        40
+      ],
+      "content": "领片分清着剧原型，点身袖片着剧的异合，单体会肋省道我管缝制体",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.82
+    },
+    {
+      "id": "t10",
+      "bbox": [
+        140,
+        515,
+        150,
+        25
+      ],
+      "content": "领片的我管缝制体",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t11",
+      "bbox": [
+        140,
+        540,
+        120,
+        25
+      ],
+      "content": "合领片我管缝制体",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.88
+    },
+    {
+      "id": "t12",
+      "bbox": [
+        140,
+        580,
+        650,
+        480
+      ],
+      "content": "通过领缝制作手：X肩线间一线的性能具：基各环间能力，但系科技的底，基各式袖片技制之业，间感的运制，抽在着运制，疑问点备，子之改计，计呈实后应技制，汇法现的运制，控在着运制，疑问点备，子之改计。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.75
+    },
+    {
+      "id": "t13",
+      "bbox": [
+        45,
+        1100,
+        750,
+        80
+      ],
+      "content": "这样要观察为的对比程成领片要逐步进计验，或缝制他的技法一者，现应",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.78
+    }
+  ],
+  "illustration_regions": [],
+  "notes": "这是一页关于胸省设计的教案，内容为纯文字，包含教学目的和教学内容的详细说明。文字为手写中文，部分字迹较模糊，识别难度较高。"
+}

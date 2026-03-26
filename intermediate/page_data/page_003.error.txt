@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/src/analyze.py", line 327, in analyze_page
+    data = call_api(client, orig_path, enh_path, model, max_tokens, scale)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/src/analyze.py", line 265, in call_api
+    response = client.messages.create(
+        model=model,
+    ...<12 lines>...
+        }],
+    )
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_utils/_utils.py", line 282, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/resources/messages/messages.py", line 996, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/v1/messages",
+        ^^^^^^^^^^^^^^^
+    ...<30 lines>...
+        stream_cls=Stream[RawMessageStreamEvent],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1364, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 1058, in request
+    request = self._build_request(options, retries_taken=retries_taken)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 521, in _build_request
+    headers = self._build_headers(options, retries_taken=retries_taken)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/anthropic/_base_client.py", line 454, in _build_headers
+    headers = httpx.Headers(headers_dict)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/httpx/_models.py", line 156, in __init__
+    bytes_value = _normalize_header_value(v, encoding)
+  File "/Users/joyzhang14/Desktop/legacy-notes-digitizer/venv/lib/python3.14/site-packages/httpx/_models.py", line 82, in _normalize_header_value
+    return value.encode(encoding or "ascii")
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 7-8: ordinal not in range(128)

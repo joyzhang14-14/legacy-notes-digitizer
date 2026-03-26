@@ -1,0 +1,415 @@
+{
+  "page_type": "text_only",
+  "page_width_px": 936,
+  "page_height_px": 1248,
+  "text_regions": [
+    {
+      "id": "t1",
+      "bbox": [
+        52,
+        42,
+        60,
+        25
+      ],
+      "content": "② 肋省",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.95
+    },
+    {
+      "id": "t2",
+      "bbox": [
+        118,
+        42,
+        580,
+        25
+      ],
+      "content": "：肋省道设计主要人体的结合，异形，我穿圆，缝制。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t3",
+      "bbox": [
+        176,
+        75,
+        140,
+        25
+      ],
+      "content": "肋省道原型效果",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.9
+    },
+    {
+      "id": "t4",
+      "bbox": [
+        176,
+        108,
+        140,
+        25
+      ],
+      "content": "肋省道造下摆线",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.88
+    },
+    {
+      "id": "t5",
+      "bbox": [
+        176,
+        141,
+        140,
+        25
+      ],
+      "content": "肋省道我胸省正",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.87
+    },
+    {
+      "id": "t6",
+      "bbox": [
+        176,
+        174,
+        600,
+        25
+      ],
+      "content": "肋省道缝制的操作，胸省的量主要反制造制领片",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t7",
+      "bbox": [
+        176,
+        207,
+        760,
+        50
+      ],
+      "content": "注意适正写肋省缝制作在识立标准。自约识立。我穿的设制",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.82
+    },
+    {
+      "id": "t8",
+      "bbox": [
+        246,
+        241,
+        50,
+        25
+      ],
+      "content": "要肋省",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.9
+    },
+    {
+      "id": "t9",
+      "bbox": [
+        52,
+        274,
+        60,
+        25
+      ],
+      "content": "③ 考虑",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.95
+    },
+    {
+      "id": "t10",
+      "bbox": [
+        118,
+        274,
+        750,
+        50
+      ],
+      "content": "：讲课时季反观我穿的，人体止有差异，缝制要体是质的待结构写质效",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t11",
+      "bbox": [
+        250,
+        324,
+        500,
+        25
+      ],
+      "content": "的各主适的关点，到反观开的差异/肩线",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.78
+    },
+    {
+      "id": "t12",
+      "bbox": [
+        176,
+        357,
+        120,
+        25
+      ],
+      "content": "异缝制质量",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t13",
+      "bbox": [
+        176,
+        390,
+        650,
+        50
+      ],
+      "content": "要科作反，观到观的识立肩线。我穿缝制领片又，制识",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t14",
+      "bbox": [
+        246,
+        424,
+        50,
+        25
+      ],
+      "content": "要得",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.88
+    },
+    {
+      "id": "t15",
+      "bbox": [
+        176,
+        457,
+        300,
+        25
+      ],
+      "content": "肋省道反到观止要的我穿圆",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.82
+    },
+    {
+      "id": "t16",
+      "bbox": [
+        176,
+        490,
+        650,
+        50
+      ],
+      "content": "在反到要肋省道要作各序要的识立肩线。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.78
+    },
+    {
+      "id": "t17",
+      "bbox": [
+        176,
+        540,
+        700,
+        25
+      ],
+      "content": "讲肋省缝制各要有，自约识立制领片= 作止定",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t18",
+      "bbox": [
+        52,
+        573,
+        120,
+        25
+      ],
+      "content": "④ 质次方法",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.9
+    },
+    {
+      "id": "t19",
+      "bbox": [
+        176,
+        606,
+        180,
+        25
+      ],
+      "content": "请观月体反观到质要",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t20",
+      "bbox": [
+        176,
+        639,
+        200,
+        25
+      ],
+      "content": "各定质设我穿圆，建到质",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.82
+    },
+    {
+      "id": "t21",
+      "bbox": [
+        176,
+        672,
+        300,
+        25
+      ],
+      "content": "质主文定个圆基，立设，我穿，缝制",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t22",
+      "bbox": [
+        52,
+        705,
+        90,
+        25
+      ],
+      "content": "① 科书",
+      "font_level": "subtitle",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.92
+    },
+    {
+      "id": "t23",
+      "bbox": [
+        150,
+        705,
+        700,
+        25
+      ],
+      "content": "：注会量行立学质肋省道机，质季青各一个。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.78
+    },
+    {
+      "id": "t24",
+      "bbox": [
+        52,
+        738,
+        120,
+        25
+      ],
+      "content": "我穿缝制肋省道各",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t25",
+      "bbox": [
+        200,
+        738,
+        500,
+        25
+      ],
+      "content": "，季作会的反学，各又我设。",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.75
+    },
+    {
+      "id": "t26",
+      "bbox": [
+        52,
+        771,
+        130,
+        25
+      ],
+      "content": "质法：圆个科定有",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.8
+    },
+    {
+      "id": "t27",
+      "bbox": [
+        190,
+        771,
+        550,
+        25
+      ],
+      "content": "要肋省道要定元（4~5个）。到30~7个注",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.85
+    },
+    {
+      "id": "t28",
+      "bbox": [
+        96,
+        804,
+        800,
+        100
+      ],
+      "content": "质个缝制服要在定要得，圆主个科各定有（4~5个）的质大主异个开。材科个注，我穿的观到肋省道到注，质定服。异有效的数次方质。穿个定作反立，任作各解效观质有质制服要设肩线，从开反科",
+      "font_level": "body",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.7
+    },
+    {
+      "id": "t29",
+      "bbox": [
+        852,
+        1180,
+        20,
+        25
+      ],
+      "content": "2",
+      "font_level": "annotation",
+      "color": "black",
+      "writing_direction": "horizontal",
+      "confidence": 0.95
+    }
+  ],
+  "illustration_regions": [],
+  "notes": "这是一页服装设计教案的纯文字内容，主要讲述胸省的设计方法和技巧。页面底部有页码标记'2'。"
+}
