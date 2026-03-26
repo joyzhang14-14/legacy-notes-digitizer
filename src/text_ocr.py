@@ -199,3 +199,145 @@ def parse_json_response(text: str) -> dict:
     cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
     cleaned = re.sub(r"\s*```$", "", cleaned)
     return json.loads(cleaned)
+
+
+# ─────────────────────────── Round 1 & 2 Prompts ───────────────────────────
+
+ROUND1_PROMPT = """\
+请准确识别这张图片中的手写中文文字。
+
+关键规则：
+1. 这是中国中央美术学院服装设计教授的手写教案
+2. 语言：只有中文、英文字母、阿拉伯数字、数学符号
+3. 绝对不包含日文（平假名、片假名）。如果你看到像日文的字符，那一定是手写中文，请猜测最接近的中文字
+4. 如果某个字完全无法辨认，用 [?] 标记
+5. 保持原始换行结构
+6. 红色文字标记为 <red>文字</red>
+7. 蓝色文字标记为 <blue>文字</blue>
+
+请同时返回每行文字的位置信息（估算像素坐标即可）。
+
+输出格式（严格JSON，无其他内容）：
+{
+  "lines": [
+    {
+      "line_num": 1,
+      "content": "识别出的文字",
+      "y_px": 50,
+      "x_px": 30,
+      "char_height_px": 35,
+      "color": "black",
+      "direction": "horizontal",
+      "is_title": false
+    }
+  ]
+}\
+"""
+
+ROUND2_PROMPT = """\
+我提供了同一段手写文字的4个不同对比度版本（从原始到重度增强）。
+请综合所有版本进行最准确的识别。
+某些字可能在某个增强级别下更清晰——请逐字比较各版本。
+
+规则：
+1. 这是中国中央美术学院服装设计教授的手写教案
+2. 只有中文+英文+数字，绝对没有日文
+3. 内容涉及：服装裁剪、省道设计、人体结构、缝制工艺
+4. 不确定的字用 [?X?] 标记（X是最佳猜测）
+5. 红色文字用 <red>文字</red> 标记
+6. 蓝色文字用 <blue>文字</blue> 标记
+
+输出格式（严格JSON，无其他内容）：
+{
+  "lines": [
+    {
+      "line_num": 1,
+      "content": "识别出的文字",
+      "y_px": 50,
+      "x_px": 30,
+      "char_height_px": 35,
+      "color": "black",
+      "direction": "horizontal",
+      "is_title": false
+    }
+  ]
+}\
+"""
+
+# ─────────────────────────── 自适应 OCR（Round 1 带重试） ───────────────────────────
+
+_LEVEL_ORDER = ["light", "medium", "heavy", "extreme"]
+_UNCERTAIN_RATIO_THRESHOLD = 0.3
+
+
+def adaptive_gemini_round1(
+    client: genai.Client,
+    versions: dict,
+    auto_best: str,
+    region_id: str,
+) -> tuple[dict, str]:
+    """
+    Round 1：从自动推荐的增强级别开始，若不确定字符超过 30% 则自动升级。
+    返回 (parsed_json, level_used)。
+    """
+    start_idx = _LEVEL_ORDER.index(auto_best) if auto_best in _LEVEL_ORDER else 0
+    last_parsed = None
+
+    for level in _LEVEL_ORDER[start_idx:]:
+        time.sleep(GEMINI_INTERVAL)
+        raw = gemini_ocr(client, [versions[level]], ROUND1_PROMPT)
+
+        try:
+            parsed = parse_json_response(raw)
+        except (json.JSONDecodeError, ValueError):
+            print(f"  [Round1/{level}] JSON 解析失败，升级...")
+            last_parsed = {"lines": []}
+            continue
+
+        lines = parsed.get("lines", [])
+        total_chars = sum(len(ln.get("content", "")) for ln in lines)
+        uncertain = sum(
+            ln.get("content", "").count("[?") for ln in lines
+        )
+
+        if total_chars == 0:
+            print(f"  [Round1/{level}] 未识别到文字，升级...")
+            last_parsed = parsed
+            continue
+
+        ratio = uncertain / total_chars
+        if ratio > _UNCERTAIN_RATIO_THRESHOLD:
+            print(f"  [Round1/{level}] 不确定率 {ratio:.0%}，升级...")
+            last_parsed = parsed
+            continue
+
+        print(f"  [Round1/{level}] {total_chars}字，不确定率 {ratio:.0%} ✓")
+        return parsed, level
+
+    print(f"  [WARNING] {region_id} 所有增强级别均无法达到满意质量，使用最后结果")
+    return last_parsed or {"lines": []}, _LEVEL_ORDER[-1]
+
+
+def gemini_round2(
+    client: genai.Client,
+    versions: dict,
+    region_id: str,
+) -> dict:
+    """
+    Round 2：同时发送 4 张图（original/light/medium/heavy），综合识别。
+    返回 parsed_json。
+    """
+    images = [
+        versions["original"],
+        versions["light"],
+        versions["medium"],
+        versions["heavy"],
+    ]
+    time.sleep(GEMINI_INTERVAL)
+    raw = gemini_ocr(client, images, ROUND2_PROMPT)
+
+    try:
+        return parse_json_response(raw)
+    except (json.JSONDecodeError, ValueError):
+        print(f"  [Round2] {region_id} JSON 解析失败，返回空结果")
+        return {"lines": []}
